@@ -16,9 +16,22 @@ const wrappedExec = (commands, options) => {
 };
 
 const main = async () => {
-  const email = "git config --get remote.origin";
-  const res = await wrappedExec(email);
-  console.log(res, arguments, "test");
+  const url = await wrappedExec("git config --get remote.origin.url");
+  let ssh;
+  let http;
+  if (url.startsWith("git")) {
+    ssh = url;
+    const [, , host, group, repo] = url.match(/(^git)@(.+):(.+)[/](.+)/);
+    http = `https://${host}/${group}/${repo}`;
+  } else {
+    http = url;
+    const [, , host, group, repo] = url.match(
+      /(^https:[/][/])(.+)[/](.+)[/](.+)/
+    );
+    ssh = `git@${host}:${group}/${repo}`;
+  }
+  const [, , flag] = arguments;
+  await wrappedExec(`git remote set-url origin ${flag === "-s" ? ssh : http}`);
 };
 
 main();
