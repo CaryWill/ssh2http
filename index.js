@@ -1,4 +1,5 @@
-// 1. test bin file locally
+#!/usr/bin/env node
+
 const { exec } = require("node:child_process");
 const arguments = process.argv;
 
@@ -14,10 +15,10 @@ const wrappedExec = (commands, options) => {
   });
 };
 
-const test = async () => {
-  const email = "git config --get user.email";
+const main = async () => {
+  const email = "git config --get remote.origin";
   const res = await wrappedExec(email);
   console.log(res, arguments, "test");
 };
 
-test();
+main();
