@@ -19,18 +19,24 @@ const main = async () => {
   const url = await wrappedExec("git config --get remote.origin.url");
   let ssh;
   let http;
+  // flag
+  // -s -> git
+  // -h -> http
+  // -hs -> https
+  const [, , flag] = arguments;
+  const isSecure = flag === "-hs";
+  const protocol = isSecure ? "https" : "http";
   if (url.startsWith("git")) {
     ssh = url;
     const [, , host, group, repo] = url.match(/(^git)@(.+):(.+)[/](.+)/);
-    http = `https://${host}/${group}/${repo}`;
+    http = `${protocol}://${host}/${group}/${repo}`;
   } else {
     http = url;
     const [, , host, group, repo] = url.match(
-      /(^https:[/][/])(.+)[/](.+)[/](.+)/
+      /(^https?:[/][/])(.+)[/](.+)[/](.+)/
     );
     ssh = `git@${host}:${group}/${repo}`;
   }
-  const [, , flag] = arguments;
   await wrappedExec(`git remote set-url origin ${flag === "-s" ? ssh : http}`);
 };
 
