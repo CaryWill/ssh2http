@@ -1,5 +1,4 @@
 ```
-npm install -g ssh2http 
 ```
 
 1. 如果想要将 ssh 转成 http 那么使用，`ssh2http -h`
