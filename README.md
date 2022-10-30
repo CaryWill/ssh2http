@@ -7,5 +7,4 @@
 
 ## 备注 
 
-1. 因为 ssh 用惯了，很容易忘记密码, 你可以使用 `git config --global credential.helper store` 命令记住密码。
 
